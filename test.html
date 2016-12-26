@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./libs/jquery.js"></script>
+    <script src="./libs/radialIndicator.js"></script>
+</head>
+<body>
+<div class="prg-cont rad-prg" id="indicatorContainer"><canvas width="110" height="110"></canvas></div>
+
+<script>
+    var radialObj = radialIndicator('#indicatorContainer', {
+        barColor : '#87CEEB',
+        barWidth : 10,
+        initValue : 0
+    });
+
+    //Using Instance
+//    radialObj.animate(60);
+
+</script>
+
+</body>
+</html>

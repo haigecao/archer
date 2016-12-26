@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>webVR实例列表</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+
+        /* http://meyerweb.com/eric/tools/css/reset/
+      v2.0 | 20110126
+      License: none (public domain)
+   */
+
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        .img {
+            width: 200px;
+        }
+
+        .selectAction {
+            float: right;
+            width: 150px;
+            border: 1px solid #0000AA;
+        }
+
+        .action {
+            margin: 10px 10px 0 0 ;
+            width: 150px;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .actionItem {
+            width: 150px;
+            height: 30px;
+            font-size: 20px;
+        }
+        .hg {
+            margin: 40px 0 0 20px;
+
+        }
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #800b41;
+        }
+
+        .goto {
+            border: 3px solid red;
+        }
+
+        .lable {
+            margin: 20px 0 10px 0;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body id="hgID">
+
+
+<div class="selectAction">
+    <div class="action" for="action">选择动作</div>
+    <select id="actionItem" name="" class="actionItem">
+        <option value="1" >舞蹈A</option>
+        <option value ="2">熊猫正步走</option>
+        <option value ="3">摆臂舞</option>
+        <option value="4">必杀1——前滚翻</option>
+        <option value="5">必杀2——双剑</option>
+        <option value="6">必杀3——后踢腿</option>
+        <option value="7">必杀4——挥拳</option>
+        <option value="8">必杀5——上墙空翻</option>
+        <option value="9">必杀6——前踢腿</option>
+        <option value="10">必杀10——重拳</option>
+        <option value="11">必杀11——蓄势</option>
+        <option value="12">必杀10——崩拳</option>
+        <option value="13">nobody</option>
+        <option value="14">体操</option>
+        <option value="15">balalaika</option>
+        <option value="16">体操帝——熊猫团</option>
+        <option value="17">把你mikumiku掉</option>
+        <option value="18">doara</option>
+        <option value="19">左右抖动</option>
+        <option value="20">FirstKiss</option>
+        <option value="21">only my railgun N</option>
+    </select>
+
+<br><br>
+<hr>
+    <div class="action" for="action">只有一首音乐</div>
+    <select id="muiceItem"  class="actionItem">
+        <option value = "0" >关闭</option>
+        <option value = "1">开启</option>
+    </select>
+
+    
+</div>
+
+<style type="text/css" media="screen">
+    .fuckyou {
+        font-size: 80px;
+        margin-left: 100px;
+        margin-top: 100px;
+    }
+    .fuckyou1 {
+        border: 1px solid #000;
+    }
+
+</style>
+<br>
+<div class='fuckyou'>
+<span class="fuckyou1">上</span>
+<span class="fuckyou1">下</span>
+<span class="fuckyou1">前</span>
+<span class="fuckyou1">后</span>
+<span class="fuckyou1">左</span>
+<span class="fuckyou1">右</span>
+
+</div>
+
+
+<ul class="hg">
+    <p class="lable">点击图片跳转</p>
+    <li>
+        <p>
+            <span>模型名称1</span>
+            <span class="name">[性能最好]</span>
+        </p>
+        <div>
+            <a class="goto" data-attr="0" >
+                <img class="img" src="./image/0.png" alt=""/>
+            </a>
+        </div>
+    </li>
+
+<script>
+    
+    var ac = 1;
+    var yy = 0;
+
+    var select1 = document.getElementById('actionItem');
+    select1.onchange = function(evt){
+        ac = select1.value;
+    }
+
+
+    
+    var select2 = document.getElementById('muiceItem');
+    select2.onchange = function(evt){
+        yy = select2.value;
+    }
+
+
+    var gotoList = document.querySelectorAll(".goto");
+    for (var i = 0; i < gotoList.length; i++) {
+        gotoList[i].addEventListener("click", clcikFun, false);
+    }
+
+    function clcikFun(e) {
+        id = e.srcElement.parentNode.dataset.attr;
+        // location.href = 'http://www.hgonlywj.com/test.html?id=' + id + "&ac=" + ac + "&yy=" + yy; 
+        location.href = 'http://res.imtt.qq.com/HG_VR/1223/webVR/hg.html?id=' 
+                        + id + "&ac=" + ac + "&yy=" + yy;
+    
+    }
+
+
+</script>
+
+</ul>
+
+
+</body>
+</html>

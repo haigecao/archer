@@ -1,0 +1,625 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Simple Example</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="./css/arror.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./libs/zepto.js"></script>
+    <script src="./hgjs/loaderImg.js"></script>
+    <script>
+        var archer = {
+            start: true,
+            actionNum: 1,
+            currentMesh: "",        // 当前模型
+            nextMesh: "",           // 下一个模型
+            oldMesh: "",
+            oldCamer: "",
+            playOrPause: true,      // 是否播放，默认播放
+            initCamer: "",
+            initMesh: "",
+        };
+
+    </script>
+
+
+</head>
+
+<body>
+<div id="show" class="loadEffect">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+
+<style>
+    #nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        display: none;
+        font-size: 20px;
+        margin-top: 20px;
+    }
+
+    #nav .pos {
+        margin-right: 10px;
+    }
+
+    #nav .pos .btn {
+        text-align: center;
+        border-radius: 3px;
+        /*border: 1px solid #369;*/
+        color: #0080ff;
+        padding: 10px 5px;
+        margin-left: 20px;
+        width: 40px;
+        height: 40px;
+    }
+
+    #reStart {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 9999;
+        display: none;
+        font-size: 20px;
+    }
+
+    #reStart .pos .btn {
+        text-align: center;
+        border-radius: 3px;
+        /*border: 1px solid #369;*/
+        color: #0080ff;
+        padding: 10px 5px;
+        margin-right: 20px;
+        margin-top: 20px;
+    }
+
+    #controlArea {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        z-index: 9999;
+        display: none;
+        font-size: 20px;
+    }
+
+    #controlArea .pos .btn {
+        text-align: center;
+        border-radius: 3px;
+        /*border: 1px solid #369;*/
+        color: #0080ff;
+        padding: 10px 5px;
+        margin-right: 20px;
+        margin: 0 0 20px 20px;
+    }
+
+    #controlAction {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+        display: none;
+        font-size: 20px;
+        margin-right: 20px;
+        margin-bottom: 30px;
+    }
+
+    #controlAction .pos .btn {
+        text-align: center;
+        border-radius: 3px;
+        /*border: 1px solid #369;*/
+        color: #0080ff;
+        padding: 10px 5px;
+    }
+    .but-control {
+        width: 40px;
+        height: 40px;
+    }
+
+    .showActionLable {
+        position: relative;
+        width: 100px;
+        font-size: 17px;
+        height: 20px;
+        top: -12px;
+    }
+
+    .controller-area {
+        width: 50px;
+        height: 50px;
+        position: relative;
+        left:-2px;
+    }
+
+</style>
+<div id="nav">
+    <div class="pos">
+        <div class="btn" id="playOrPause">
+            <!--暂停-->
+            <img class="but-control" src="./images/play.png" alt="暂停">
+        </div>
+    </div>
+</div>
+
+
+<div id="reStart">
+    <div class="pos">
+        <div class="btn" id="reset">
+            <!--复位-->
+            <img class="but-control" src="./images/refresh.png" alt="复位">
+        </div>
+    </div>
+</div>
+
+
+<div id="controlArea">
+    <div class="pos">
+        <div class="btn" id="Area">
+            <!--方向-->
+            <img class="controller-area" src="./images/controller.png" alt="方向">
+        </div>
+    </div>
+</div>
+
+<div id="controlAction">
+    <div class="pos">
+        <span class="btn btn1" >
+            <!--pro-->
+            <img id="Action-pro" class="but-control" src="./images/pre.png" alt="前一个">
+        </span>
+        <span class="btn btn2 showActionLable" id="Action"> Nobody</span>
+        <span class="btn btn3" >
+            <!--next-->
+            <img id="Action-next" class="but-control" src="./images/next.png" alt="下一个">
+        </span>
+    </div>
+</div>
+
+<div id="wj">
+    <div id="container"></div>
+    <div id='hg'>
+        <div id="two">
+        <span class="btnfangxiang" id="left">
+            <div class="arrow-left arrow-box1">
+                <b class="left"><i class="left-arrow1"></i><i class="left-arrow2"></i></b>
+            </div>
+        </span>
+            <span>
+            <img class="showCase" src="./image/1.png" alt="">
+        </span>
+
+            <span class="btnfangxiang" id="right">
+             <div class="arrow-right arrow-box">
+                <b class="right"><i class="right-arrow1"></i><i class="right-arrow2"></i></b>
+            </div>
+        </span>
+        </div>
+        <div id="fangxiang">
+            <div class="pos">
+                <div class="btnInit" id="initPositon">复原位置</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 重置
+    $('#reset').click(function () {
+        camera = archer.oldCamer;
+        controls = new THREE.TrackballControls(camera);
+        archer.oldCamer = camera.clone();
+    });
+
+    var actionList = {
+        "1" : "必杀技1",
+        "2" : "必杀技2",
+        "3" : "必杀技3",
+        "4" : "必杀技4",
+        "5" : "必杀技5",
+        "6" : "必杀技6",
+        "7" : "必杀技7",
+        "8" : "必杀技8",
+        "9" : "必杀技9",
+        "10" : "必杀技10",
+        "11" : "必杀技11",
+        "12" : "必杀技12"
+    };
+
+    // 上一个
+    $("#Action-pro").click(function () {
+
+        var num = archer.actionNum;
+        if (num != 1) {
+            num = num - 1;
+        } else {
+            num = 12;
+        }
+
+        archer.actionNum = num;
+        $("#Action").html(actionList[num]);
+        archer.nextMesh = meshlist[num];
+        changeMove();
+
+    });
+
+    $("#Action-next").click(function () {
+
+        var num = archer.actionNum;
+        if (num != 12) {
+            num = num + 1;
+        } else {
+            num = 1;
+        }
+
+        archer.actionNum = num;
+        $("#Action").html(actionList[num]);
+        archer.nextMesh = meshlist[num];
+        changeMove();
+        console.log("------------- num -----------------", num);
+    });
+
+    function changeMove() {
+        $("#playOrPause .but-control").attr('src', "./images/stop.png");
+        archer.playOrPause = true;
+        scene.remove(archer.currentMesh);
+        scene.add(archer.nextMesh);
+        archer.currentMesh = archer.nextMesh;
+
+        camera = archer.oldCamer;
+        controls = new THREE.TrackballControls(camera);
+        archer.oldCamer = camera.clone();
+    }
+    function initButton() {
+        $('#wj').css("display", "block");
+        $('#nav').css('display', 'block');
+        $("#reStart").css('display', 'block');
+        $('#controlArea').css('display', 'block');
+        $('#controlAction').css('display', 'block');
+
+        $("#Action").html(actionList[archer.actionNum]);
+    }
+
+</script>
+
+
+<script src="three.js/three.js"></script>
+<script src="three.js/Detector.js"></script>
+<script src="three.js/CopyShader.js"></script>
+<script src="three.js/FXAAShader.js"></script>
+<script src="three.js/EffectComposer.js"></script>
+<script src="three.js/RenderPass.js"></script>
+<script src="three.js/ShaderPass.js"></script>
+<script src="three.js/WebGLDeferredRenderer.js"></script>
+<script src="libs/mmdparser.min.js"></script>
+<script src="libs/ammo.js"></script>
+<script src="three.js/TGALoader.js"></script>
+<script src="three.js/MMDLoader.js"></script>
+<script src="three.js/OutlineEffect.js"></script>
+<script src="three.js/CCDIKSolver.js"></script>
+<script src="three.js/MMDPhysics.js"></script>
+<script src="three.js/TrackballControls.js"></script>
+<!--<script src="libs/stats.min.js"></script>-->
+<script type="text/javascript" src="./libs/zepto.js"></script>
+<script>
+
+    // 模型的路径
+    var modle = {
+        0: "miku.pmd",
+        1: "corico/corico.pmd",
+        2: "Easterbunny/EasterBunny.pmd",
+        3: "Alparka/Alparka.pmx",
+        4: "BunnyPajamas/BunnyPajamas.pmx",
+        5: "Crane/Crane.pmx",
+        6: "Kasha/Kasha.pmx",
+        7: "Polka/Polka.pmx",
+        8: "Wedding/Wedding.pmx",
+        9: "Originator/Originator.pmx",
+        10: "Hood/Hood.pmx",
+        11: "Floral/Floral.pmx",
+        12: "jihouchan/jihouchan.pmd",
+        13: "Holiday/Holiday.pmx",
+        14: "Guilty/Guilty.pmx",
+    };
+
+    // 模型的动作
+    var action = {
+        0: ['wavefile_v2.vmd'],
+        1: ['./Action/wavefile_v2.vmd'],
+        2: ['./Action/3.vmd'],
+        3: ['./Action/5.vmd'],
+        4: ['./Action/6.vmd'],
+        5: ['./Action/7.vmd'],
+        6: ['./Action/8.vmd'],
+        7: ['./Action/9.vmd'],
+        8: ['./Action/11.vmd'],
+        9: ['./Action/12.vmd'],
+        10: ['./Action/13.vmd'],
+        11: ['./Action/14.vmd'],
+        12: ['./Action/15.vmd'],
+        13: ['./Action/17.vmd'],
+        14: ['./Action/18.vmd']
+    };
+    function parseQueryString(url) {
+        if (url == "") {
+            return {
+                "ac": 0,
+                "id": 0,
+                "yy": 0
+            };
+        }
+        var json = {};
+        var arr = url.substr(url.indexOf('?') + 1).split('&');
+
+        arr.forEach(function (item) {
+            var tmp = item.split('=');
+            json[tmp[0]] = tmp[1];
+        });
+
+        if (typeof json['id'] == undefined || typeof json['id'] == null) {
+            json["id"] = 0;
+        }
+
+        if (typeof json['ac'] == undefined || typeof json['ac'] == null) {
+            json["ac"] = 0;
+        }
+
+        return json;
+    }
+
+    var WIDTH = window.innerWidth;
+    var HEIGHT = window.innerHeight;
+    var windowHalfX = WIDTH / 2;
+    var windowHalfY = HEIGHT / 2;
+    var NEAR = 1.0, FAR = 350.0;
+    var VIEW_ANGLE = 45;
+    var renderer, camera, scene, stats, clock;
+    var controls;
+    var helper;
+    var numLights = 40;
+    var lights = [];
+    var ready = false;
+
+
+    function initScene() {
+        renderer = new THREE.WebGLDeferredRenderer();       //
+        renderer.enableLightPrePass(true);
+        renderer.forwardRendering = true;
+        renderer.setSize(WIDTH, HEIGHT);	// 初始化渲染
+        camera = new THREE.PerspectiveCamera(VIEW_ANGLE, WIDTH / HEIGHT, NEAR, FAR);
+        camera.position.z = 50;
+        archer.oldCamer = camera.clone();       // 深度克隆 相机
+        archer.initCamer = camera.clone();      // 相机初始
+
+        controls = new THREE.TrackballControls(camera);
+        scene = new THREE.Scene();
+        var container = document.getElementById('container');
+        container.appendChild(renderer.domElement);
+
+        initModel();
+
+        initLights();
+        initCute();
+
+        window.addEventListener('resize', onWindowResize, false);
+        clock = new THREE.Clock();
+
+    }
+
+    function initModel() {
+        var onProgress = function (xhr) {
+            if (xhr.lengthComputable) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log(Math.round(percentComplete, 2) + '% downloaded');
+            }
+        };
+
+        var onError = function (xhr) {
+        };
+        var obj = parseQueryString(location.search);
+        if (typeof obj["id"] == undefined) {
+            obj["id"] = 0;
+        }
+        if (typeof obj["ac"] == undefined) {
+            obj["ac"] = 0;
+        }
+        var modelName = modle[obj["id"]];
+        modelFile = "./Model/" + modelName;
+        vmdFiles = action[obj["ac"]];
+        console.log(obj, " \n", "modelFile = ", modelFile, " \n vmdFiles = ", vmdFiles);
+
+
+
+        helper = new THREE.MMDHelper();
+        var loader = new THREE.MMDLoader();
+        mesh = "";
+        loader.load(modelFile, vmdFiles, function (object) {
+            mesh = object;
+            archer.currentMesh = mesh;     //  保存当前
+            console.log("currentMesh---------", archer.currentMesh);
+            mesh.position.y = -7;
+            scene.add(mesh);
+            // 深度克隆
+            archer.oldMesh = mesh.clone();
+            archer.initMesh = mesh.clone();
+
+            for (var i = 0, il = mesh.material.materials.length; i < il; i++) {
+                var material = mesh.material.materials[i];
+                material.emissive.multiplyScalar(0.2);
+            }
+            helper.add(mesh);
+            helper.setAnimation(mesh);
+
+            ikHelper = new THREE.CCDIKHelper(mesh);
+            ikHelper.visible = false;
+            scene.add(ikHelper);
+
+            helper.setPhysics(mesh);
+            ready = true;
+
+            setTimeout(function () {
+                document.getElementById("show").style.display = "none";
+                initButton();
+
+                initCute();
+            }, 1000);
+        }, onProgress, onError);
+
+    }
+
+    function initLights() {
+        var distance = 7;
+        var c = new THREE.Vector3();
+        var geometry = new THREE.SphereGeometry(0.1, 0.1, 0.1);
+        var directionalLight = new THREE.DirectionalLight(0x101010);
+        directionalLight.position.set(-1, 1, 1).normalize();
+        scene.add(directionalLight);
+        var spotLight = new THREE.SpotLight(0xf0f0f0);
+        spotLight.position.set(30, 30, 30);
+        spotLight.angle = 0.5;
+        scene.add(spotLight);
+    }
+
+    function onWindowResize(event) {
+        WIDTH = window.innerWidth;
+        HEIGHT = window.innerHeight;
+        windowHalfX = WIDTH / 2;
+        windowHalfY = HEIGHT / 2;
+        renderer.setSize(WIDTH, HEIGHT);    // cancas
+        camera.aspect = WIDTH / HEIGHT;
+        camera.updateProjectionMatrix();
+
+    }
+
+
+    function update() {
+        controls.update();
+        var delta = clock.getDelta();
+        var time = Date.now() * 0.0006;
+        helper.animate(delta);
+        for (var i = 0, il = lights.length; i < il; i++) {
+            var light = lights[i];
+            var x = Math.sin(time + i * 7.0) * 24 * Math.abs(Math.sin(time / i / 7.0));
+            var y = Math.cos(time + i * 5.0) * 15 * Math.abs(Math.sin(time / i / 13.0)) + 6;
+            var z = Math.cos(time + i * 3.0) * 24 * Math.abs(Math.sin(time / i / 17.0));
+            light.position.set(x, y, z);
+        }
+    }
+
+    function render() {
+        renderer.render(scene, camera);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        if (ready) {
+            update();
+            render();
+        }
+    }
+
+    function onWindowClick(e) {
+        for (var i = 0; i < mesh.geometry.animations.length; i++) {
+            clip = mesh.geometry.animations[i];
+            action = mesh.mixer.clipAction(clip);
+            action.time = 500;
+            action.play();
+        }
+    }
+
+    // 播放
+    function PlayMesh() {
+        var mesh = archer.currentMesh;
+        for (var i = 0; i < mesh.geometry.animations.length; i++) {
+            clip = mesh.geometry.animations[i];
+            action = mesh.mixer.clipAction(clip);
+            action.time = archer.playTime;
+            console.log("PlayMesh");
+            action.play();
+        }
+    }
+    // 暂停
+    function PauseMesh() {
+        var mesh = archer.currentMesh;
+        for (var i = 0; i < mesh.geometry.animations.length; i++) {
+            clip = mesh.geometry.animations[i];
+            action = mesh.mixer.clipAction(clip);
+            console.log("PauseMesh");
+            archer.playTime = action.time;
+            action.stop();
+        }
+    }
+
+    $("#playOrPause").click(function () {
+
+        if (archer.playOrPause == true) {   // 播放 --> 停止
+            $("#playOrPause .but-control").attr('src', "./images/stop.png");
+            PauseMesh();
+            archer.playOrPause = false;
+
+        } else {                            // 停止 --> 播放
+            $("#playOrPause .but-control").attr('src', "./images/play.png");
+            PlayMesh();
+            archer.playOrPause = true;
+
+        }
+    })
+
+
+    //--------------- 初始化 正方形 ------------------
+    function initCute() {
+        materials = [];
+        for (var i = 1; i <= 6; ++i) {
+            materials.push(new THREE.MeshBasicMaterial({
+                map: THREE.ImageUtils.loadTexture('../img/' + i + '.png',
+                    {}, function () {
+                        renderer.render(scene, camera);
+                    }),
+                overdraw: true
+            }));
+        }
+
+        cube = new THREE.Mesh(new THREE.CubeGeometry(5, 5, 5),
+            new THREE.MeshFaceMaterial(materials));
+
+
+        cube.position.y = -15;
+        scene.add(cube);
+
+    }
+
+    // 下载背景图片的
+    //    function  loadBackgroundImg() {
+    //        var texture = new THREE.Texture();
+    //        var loader = new THREE.ImageLoader(manager);
+    //        loader.load('/uploads/160701/pattern-7.png', function(image) {
+    //
+    //            texture.image = image;
+    //            texture.needsUpdate = true;
+    //
+    //        });
+    //    }
+
+    initScene();
+    animate();
+
+
+</script>
+
+<!--<script src="./hgjs/loaderlist.js"></script>-->
+
+<script src="./hgjs/loadAll.js"></script>
+
+
+</body>
+
+</html>

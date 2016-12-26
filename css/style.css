@@ -1,0 +1,387 @@
+body {
+    background-color: #000;
+    margin: 0px;
+    display: block;
+    position: relative;
+}
+
+#info {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    color: #ffffff;
+    padding: 5px;
+    font-family: Monospace;
+    font-size: 13px;
+    text-align: center;
+}
+
+a {
+    color: #ff0080;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #0080ff;
+}
+
+#stats {
+    position: absolute;
+    top: 10px;
+    left: 5px
+}
+
+#stats #fps {
+    background: transparent !important
+}
+
+#stats #fps #fpsText {
+    color: #aaa !important
+}
+
+#stats #fps #fpsGraph {
+    display: none
+}
+
+#show {
+    margin: 100px auto 0;
+    z-index: 1000;
+    font-size: 40px;
+}
+
+#fuck {
+    text-align: center;
+}
+
+#showArea {
+    width: 80%;
+    height: 80%;
+}
+
+.loading {
+    width: 150px;
+    height: 15px;
+    margin: 0 auto;
+    margin-top: 100px;
+    text-align: center;
+}
+
+.loading span {
+    display: inline-block;
+    width: 15px;
+    height: 100%;
+    margin-right: 5px;
+    background: #f3f3f3;
+    -webkit-animation: load 1.04s ease infinite;
+}
+
+.loading span:last-child {
+    margin-right: 0px;
+}
+
+@-webkit-keyframes load {
+    0% {
+        opacity: 1;
+        -webkit-transform: scale(1.2);
+    }
+    100% {
+        opacity: .2;
+        -webkit-transform: scale(.2);
+    }
+}
+
+.loading span:nth-child(1) {
+    -webkit-animation-delay: 0.13s;
+}
+
+.loading span:nth-child(2) {
+    -webkit-animation-delay: 0.26s;
+}
+
+.loading span:nth-child(3) {
+    -webkit-animation-delay: 0.39s;
+}
+
+.loading span:nth-child(4) {
+    -webkit-animation-delay: 0.52s;
+}
+
+.loading span:nth-child(5) {
+    -webkit-animation-delay: 0.65s;
+}
+
+.loadEffect {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin: 0 auto;
+    top: 30%;
+    /* left: -10%; */
+    left: -10px;
+    top: -10px;
+}
+
+.loadEffect span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: lightgreen;
+    position: absolute;
+    -webkit-animation: load 1.04s ease infinite;
+}
+
+@-webkit-keyframes load {
+    0% {
+        -webkit-transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: scale(.3);
+        opacity: 0.5;
+    }
+}
+
+.loadEffect span:nth-child(1) {
+    left: 0;
+    top: 50%;
+    margin-top: -10px;
+    -webkit-animation-delay: 0.13s;
+}
+
+.loadEffect span:nth-child(2) {
+    left: 14px;
+    top: 14px;
+    -webkit-animation-delay: 0.26s;
+}
+
+.loadEffect span:nth-child(3) {
+    left: 50%;
+    top: 0;
+    margin-left: -10px;
+    -webkit-animation-delay: 0.39s;
+}
+
+.loadEffect span:nth-child(4) {
+    top: 14px;
+    right: 14px;
+    -webkit-animation-delay: 0.52s;
+}
+
+.loadEffect span:nth-child(5) {
+    right: 0;
+    top: 50%;
+    margin-top: -10px;
+    -webkit-animation-delay: 0.65s;
+}
+
+.loadEffect span:nth-child(6) {
+    right: 14px;
+    bottom: 14px;
+    -webkit-animation-delay: 0.78s;
+}
+
+.loadEffect span:nth-child(7) {
+    bottom: 0;
+    left: 50%;
+    margin-left: -10px;
+    -webkit-animation-delay: 0.91s;
+}
+
+.loadEffect span:nth-child(8) {
+    bottom: 14px;
+    left: 14px;
+    -webkit-animation-delay: 1.04s;
+}
+
+#container {
+    position: relative;
+    /*width: 80%;*/
+    height: 80%;
+    top: 0;
+    left: 0;
+}
+
+#hg {
+    z-index: 9999;
+    height: 100px;
+    width: 100%;
+    display: none;
+    position: absolute;
+    /*bottom:0px;*/
+    border: 1px solid #fff;
+}
+
+#fangxiang {
+    float: right;
+    width: 100px;
+    height: 100px;
+    top: -104px;
+    position: relative;
+}
+
+#fangxiang .pos {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.btnInit {
+    color: #0080ff;
+    border: 2px solid #369;
+    height: 30px;
+    text-align: center;
+    padding: 10px 0 0 0;
+    margin: 0 5px 0 0;
+    border-radius: 3px;
+}
+
+.img-lunbo {
+    width: 100px;
+    height: 100px;
+}
+
+.te-next-left {
+    float: left;
+}
+
+.te-next-right {
+    float: right;
+}
+
+.te-cover {
+    position: absolute;
+    left: -60px;
+    top: -40px;
+}
+
+#left {
+    position: absolute;
+    left: 20px;
+    top: 27px;
+    width: 40px;
+    height: 40px;
+}
+
+#right {
+    position: absolute;
+    left: 200px;
+    top: 27px;
+    width: 40px;
+    height: 40px;
+}
+
+.btnfangxiang {
+    border-radius: 50%;
+    font-size: 27px;
+    text-align: center;
+    background: #0080ff;
+}
+
+.showCase {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    left: 80px;
+}
+
+#wj {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: none;
+}
+
+#nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: none;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+#nav .pos {
+    margin-right: 10px;
+}
+
+#nav .pos .btn {
+    text-align: center;
+    border-radius: 3px;
+    /*border: 1px solid #369;*/
+    color: #0080ff;
+    padding: 10px 5px;
+    margin-left: 20px;
+    width: 40px;
+    height: 40px;
+}
+
+#reStart {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+    display: none;
+    font-size: 20px;
+}
+
+#reStart .pos .btn {
+    text-align: center;
+    border-radius: 3px;
+    /*border: 1px solid #369;*/
+    color: #0080ff;
+    padding: 10px 5px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+#controlArea {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: none;
+    font-size: 20px;
+}
+
+#controlArea .pos .btn {
+    text-align: center;
+    border-radius: 3px;
+    /*border: 1px solid #369;*/
+    color: #0080ff;
+    padding: 10px 5px;
+    margin-right: 20px;
+    margin: 0 0 20px 20px;
+}
+
+#controlAction {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: none;
+    font-size: 20px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+}
+
+#controlAction .pos .btn {
+    text-align: center;
+    border-radius: 3px;
+    /*border: 1px solid #369;*/
+    color: #0080ff;
+    padding: 10px 5px;
+}
+.but-control {
+    width: 40px;
+    height: 40px;
+}
+
+.showActionLable {
+    position: relative;
+    width: 100px;
+    font-size: 17px;
+    height: 20px;
+    top: -12px;
+}
+】
