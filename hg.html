@@ -5,9 +5,10 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="./css/arror.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./libs/zepto.js"></script>
-    <script src="./libs/radialIndicator.js"></script>
+    <script src="./libs/toucher.js"></script>
 
     <script>
         var archer = {
@@ -26,18 +27,12 @@
             meshlist: [],                // 保存初始化动作模型
             loadNum: 0,                 // 下载到第几个
             actionLength: 18,           // 动作 列表 长度
-            modelLength: 5,             // 模型 列表 长度
+            modelLength: 4,             // 模型 列表 长度
         };
-
     </script>
-
-
 </head>
 
 <body>
-
-
-
 
 <div id="show" class="loadEffect">
     <span></span>
@@ -48,12 +43,20 @@
     <span></span>
     <span></span>
     <span></span>
-    <!--<div class="loadEffect" id="indicatorContainer">-->
-        <!--&lt;!&ndash;<canvas width="110" height="110"></canvas>&ndash;&gt;-->
-    <!--</div>-->
 </div>
 
-
+<div class="demo">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info progress-bar-striped active" style="width: 85%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="nav">
     <div class="pos">
@@ -74,13 +77,15 @@
 </div>
 
 <div id="controlArea">
-    <div class="pos">
-        <div class="btn" id="Area">
-            <!--方向-->
-            <img class="controller-area" src="./images/controller.png" alt="方向">
+    <div class="control-border-area">
+        <div class="assistive-touch-cnt">
+            <div class="assistiveTouch" id="assistiveTouch"><span></span></div>
         </div>
     </div>
 </div>
+
+
+
 
 <div id="controlAction">
     <div class="pos">
@@ -98,355 +103,74 @@
 
 <div id="wj">
     <div id="container"></div>
-    <div id='hg'>
-        <div id="two">
-        <span class="btnfangxiang" id="left">
-            <div class="arrow-left arrow-box1">
-                <b class="left"><i class="left-arrow1"></i><i class="left-arrow2"></i></b>
-            </div>
-        </span>
-            <span>
-            <img class="showCase" src="./image/1.png" alt="">
-        </span>
-
-            <span class="btnfangxiang" id="right">
-             <div class="arrow-right arrow-box">
-                <b class="right"><i class="right-arrow1"></i><i class="right-arrow2"></i></b>
-            </div>
-        </span>
-        </div>
-        <div id="fangxiang">
-            <div class="pos">
-                <div class="btnInit" id="initPositon">复原位置</div>
-            </div>
-        </div>
-    </div>
 </div>
 
-<script src="three.js/three.js"></script>
-<script src="three.js/Detector.js"></script>
-<script src="three.js/CopyShader.js"></script>
-<script src="three.js/FXAAShader.js"></script>
-<script src="three.js/EffectComposer.js"></script>
-<script src="three.js/RenderPass.js"></script>
-<script src="three.js/ShaderPass.js"></script>
-<script src="three.js/WebGLDeferredRenderer.js"></script>
-<script src="libs/mmdparser.min.js"></script>
-<script src="libs/ammo.js"></script>
-<script src="three.js/TGALoader.js"></script>
-<script src="three.js/MMDLoader.js"></script>
-<script src="three.js/OutlineEffect.js"></script>
-<script src="three.js/CCDIKSolver.js"></script>
-<script src="three.js/MMDPhysics.js"></script>
-<script src="three.js/TrackballControls.js"></script>
-<script src="./hgjs/loaderImg.js"></script>
-<script type="text/javascript" src="./libs/zepto.js"></script>
+</body>
 
 <script>
-
-//    radialObj = radialIndicator('#indicatorContainer', {
-//        barColor : '#87CEEB',
-//        barWidth : 10,
-//        initValue : 0
-//    });
-
-    var WIDTH = window.innerWidth;
-    var HEIGHT = window.innerHeight;
-    var windowHalfX = WIDTH / 2;
-    var windowHalfY = HEIGHT / 2;
-    var NEAR = 1.0, FAR = 350.0;
-    var VIEW_ANGLE = 45;
-    var renderer, camera, scene, stats, clock;
-    var controls;
-    var helper;
-    var numLights = 40;
-    var lights = [];
-    var ready = false;
-
-
-    function initScene() {
-        renderer = new THREE.WebGLDeferredRenderer();       //
-        renderer.enableLightPrePass(true);
-        renderer.forwardRendering = true;
-        renderer.setSize(WIDTH, HEIGHT);	// 初始化渲染
-        camera = new THREE.PerspectiveCamera(VIEW_ANGLE, WIDTH / HEIGHT, NEAR, FAR);
-        camera.position.z = 50;
-        archer.oldCamer = camera.clone();       // 深度克隆 相机
-        archer.initCamer = camera.clone();      // 相机初始
-        controls = new THREE.TrackballControls(camera);
-        scene = new THREE.Scene();
-        var container = document.getElementById('container');
-        container.appendChild(renderer.domElement);
-        initModel();
-        initLights();
-        window.addEventListener('resize', onWindowResize, false);
-        clock = new THREE.Clock();
-    }
-
-    function initModel() {
-        var onProgress = function (xhr) {
-            if (xhr.lengthComputable) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log(Math.round(percentComplete, 2) + '% downloaded');
-            }
-        };
-
-        var onError = function (xhr) {
-        };
-
-        var modelFile = "./Model/miku.pmd";
-        var vmdFiles = ["./Action/11.vmd"];
-
-        console.log("modelFile = ", modelFile, " \n vmdFiles = ", vmdFiles);
-
-        var manager = new THREE.LoadingManager();
-        manager.onProgress = function (item, loaded, total) {
-            console.log(item, loaded, total);
-        };
-
-
-        helper = new THREE.MMDHelper();
-        var loader = new THREE.MMDLoader();
-        mesh = "";
-        loader.load(modelFile, vmdFiles, function (object) {
-            mesh = object;
-            archer.isOriginPlay = true;         // 原始模型
-            archer.currentMesh = mesh;          // 保存当前
-
-            archer.meshlist[0] = mesh;
-            mesh.position.y = -7;
-            scene.add(mesh);
-            // 深度克隆
-            archer.oldMesh = mesh.clone();
-            archer.initMesh = mesh.clone();
-
-            for (var i = 0, il = mesh.material.materials.length; i < il; i++) {
-                var material = mesh.material.materials[i];
-                material.emissive.multiplyScalar(0.2);
-            }
-            helper.add(mesh);
-            helper.setAnimation(mesh);
-
-            ikHelper = new THREE.CCDIKHelper(mesh);
-            ikHelper.visible = false;
-            scene.add(ikHelper);
-
-            helper.setPhysics(mesh);
-            ready = true;
-
-            console.log("-----------------25");
-            radialObj.animate(25);
-
-//            setTimeout(function () {
-//                initButton();
-//                initCute();
-//            }, 1000);
-
-        }, onProgress, onError);
-
-    }
-
-    function initButton() {
-        $('#wj').css("display", "block");
-        $('#nav').css('display', 'block');
-        $("#reStart").css('display', 'block');
-        $('#controlArea').css('display', 'block');
-        $('#controlAction').css('display', 'block');
-
-        // $("#Action").html(actionList[archer.actionNum]);
-    }
-
-
-    function initLights() {
-        var distance = 7;
-        var c = new THREE.Vector3();
-        var geometry = new THREE.SphereGeometry(0.1, 0.1, 0.1);
-        var directionalLight = new THREE.DirectionalLight(0x101010);
-        directionalLight.position.set(-1, 1, 1).normalize();
-        scene.add(directionalLight);
-        var spotLight = new THREE.SpotLight(0xf0f0f0);
-        spotLight.position.set(30, 30, 30);
-        spotLight.angle = 0.5;
-        scene.add(spotLight);
-    }
-
-    function onWindowResize(event) {
-        WIDTH = window.innerWidth;
-        HEIGHT = window.innerHeight;
-        windowHalfX = WIDTH / 2;
-        windowHalfY = HEIGHT / 2;
-        renderer.setSize(WIDTH, HEIGHT);    // cancas
-        camera.aspect = WIDTH / HEIGHT;
-        camera.updateProjectionMatrix();
-    }
-
-
-    function update() {
-        controls.update();
-        var delta = clock.getDelta();
-        var time = Date.now() * 0.0006;
-        helper.animate(delta);
-        for (var i = 0, il = lights.length; i < il; i++) {
-            var light = lights[i];
-            var x = Math.sin(time + i * 7.0) * 24 * Math.abs(Math.sin(time / i / 7.0));
-            var y = Math.cos(time + i * 5.0) * 15 * Math.abs(Math.sin(time / i / 13.0)) + 6;
-            var z = Math.cos(time + i * 3.0) * 24 * Math.abs(Math.sin(time / i / 17.0));
-            light.position.set(x, y, z);
-        }
-    }
-
-    function render() {
-        renderer.render(scene, camera);
-    }
-
-    function animate() {
-        requestAnimationFrame(animate);
-        if (ready) {
-            update();
-            render();
-        }
-    }
-
-    function onWindowClick(e) {
-        for (var i = 0; i < mesh.geometry.animations.length; i++) {
-            clip = mesh.geometry.animations[i];
-            action = mesh.mixer.clipAction(clip);
-            action.time = 500;
-            action.play();
-        }
-    }
-
-    // 播放
-    function PlayMesh(count) {
-        var mesh = archer.currentMesh;
-        for (var i = 0; i < mesh.geometry.animations.length; i++) {
-            var clip = mesh.geometry.animations[i];
-            var action = mesh.mixer.clipAction(clip);
-            action.time = archer.playTime;
-            console.log("PlayMesh 播放");
-            archer.currentAction = action;      // 保留物体
-            archer.userStop = false;
-            action.play();
-        }
-    }
-    // 暂停
-    function PauseMesh() {
-        var mesh = archer.currentMesh;
-        for (var i = 0; i < mesh.geometry.animations.length; i++) {
-            var clip = mesh.geometry.animations[i];
-            var action = mesh.mixer.clipAction(clip);
-            console.log("PauseMesh 暂停");
-            archer.playTime = action.time;
-            archer.currentAction = action;
-            action.stop();
-
-            archer.userStop = true;     // 用户暂停模型动作
-        }
-    }
-
-    $("#playOrPause").click(function () {
-        if (archer.playOrPause == true) {   // 播放 --> 停止
-            $("#playOrPause .but-control").attr('src', "./images/play.png");
-            PauseMesh();
-            archer.playOrPause = false;
-
-        } else {                            // 停止 --> 播放
-            $("#playOrPause .but-control").attr('src', "./images/stop.png");
-            PlayMesh(0);
-            archer.playOrPause = true;
-        }
-    })
-
-
-    //--------------- 初始化 正方形 ------------------
-    function initCute() {
-        materials = [];
-        for (var i = 1; i <= 6; ++i) {
-            materials.push(new THREE.MeshBasicMaterial({
-                map: THREE.ImageUtils.loadTexture('../img/' + i + '.png',
-                    {}, function () {
-                        renderer.render(scene, camera);
-                    }),
-                overdraw: true
-            }));
-        }
-
-        cube = new THREE.Mesh(new THREE.CubeGeometry(5, 5, 5),
-            new THREE.MeshFaceMaterial(materials));
-
-
-        cube.position.y = -15;
-        scene.add(cube);
-    }
-
-
-    // 检测动作是否完成
-    function checkActionIsOver() {
-        setInterval(function () {
-            if (archer.currentAction == null) {
-                return;
-            }
-
-            var singal = archer.currentAction.isRunning();
-
-            // 动作截止，就初始化原始动作 并且，用户没有暂停
-            if (singal == false && archer.userStop == false &&
-                archer.isOriginPlay == false) {
-                archer.isOriginPlay = true;    // 原始模型
-
-                scene.remove(archer.currentMesh);
-                scene.add(mesh);
-                archer.currentMesh = mesh;
-
-                for (var i = 0; i < mesh.geometry.animations.length; i++) {
-                    var clip = mesh.geometry.animations[i];
-                    var action = mesh.mixer.clipAction(clip);
-                    action.time = archer.playTime;
-                    action.setLoop(2201, 1000);
-
-                    archer.currentAction = action;      // 保留物体
-                    action.play();
+    function  initControl() {
+        // 初始 控制器
+        var start_left,start_top;
+        util.toucher(document.getElementById('assistiveTouch'))
+            .on('swipeStart',function(e){
+                start_left = parseInt(this.style.left) || 0;
+                start_top = parseInt(this.style.top) || 0;
+                this.style.transition = 'none';
+                this.style.opacity = 1;
+            })
+            .on('swipe',function(e){
+                if ( e.moveX >= 9) {
+                    e.moveX = 9;
+                }
+                if (e.moveY > 9) {
+                    e.moveY = 9;
+                }
+                if (e.moveX <= -9) {
+                    e.moveX = -9;
+                }
+                if (e.moveY <= -9) {
+                    e.moveY = -9;
                 }
 
-                console.log("检测动作是否完成");
-            }
-        }, 1000);
+
+                this.style.left = (start_left + e.moveX) + 'px';
+                this.style.top = (start_top + e.moveY) + 'px';
+
+                console.log("e.moveX = ", e.moveX, "e.moveY = ", e.moveY);
+                return false;
+            })
+            .on('swipeEnd',function(e){
+                this.style.transition = '.1s';
+                this.style.left = '0px';
+                this.style.top = '0px';
+                this.style.opacity = '';
+            });
     }
 
-    checkActionIsOver();
-
-    //    function initBackgrondImg() {
-    //
-    //
-    //        materials.push(new THREE.MeshBasicMaterial({
-    //            map: THREE.ImageUtils.loadTexture('./images/1.png',
-    //                {}, function () {
-    //                    renderer.render(scene, camera);
-    //                }),
-    //            overdraw: true
-    //        }));
-    //
-    //
-    ////        cube = new THREE.Mesh(new THREE.CubeGeometry(5, 5, 5),
-    ////            new THREE.MeshFaceMaterial(materials));
-    //
-    //
-    //        cube.position.y = -15;
-    //        scene.add(cube);
-    //    }
-
-    initScene();
-    animate();
-    //    initBackgrondImg
+    initControl();
 
 
 </script>
+<script src="threejs/three.js"></script>
+<script src="threejs/Detector.js"></script>
+<script src="threejs/CopyShader.js"></script>
+<script src="threejs/FXAAShader.js"></script>
+<script src="threejs/EffectComposer.js"></script>
+<script src="threejs/RenderPass.js"></script>
+<script src="threejs/ShaderPass.js"></script>
+<script src="threejs/WebGLDeferredRenderer.js"></script>
+<script src="libs/mmdparser.min.js"></script>
+<script src="libs/ammo.js"></script>
+<script src="threejs/TGALoader.js"></script>
+<script src="threejs/MMDLoader.js"></script>
+<script src="threejs/OutlineEffect.js"></script>
+<script src="threejs/CCDIKSolver.js"></script>
+<script src="threejs/MMDPhysics.js"></script>
+<script src="threejs/TrackballControls.js"></script>
 
-<!--<script src="./hgjs/loaderlist.js"></script>-->
-
-<script src="./hgjs/loadAll.js"></script>
+<!--自己的JS-->
+<script src="./hgjs/page.js"></script>
 <script src="./hgjs/action.js"></script>
-
-</body>
+<script src="./hgjs/loadAll.js"></script>
 
 </html>

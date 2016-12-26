@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Toucher by bh-lay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<style>
+
+    .assistive-touch-cnt{
+        margin-bottom: 20px;
+        position: absolute;
+        z-index: 10000;
+    }
+
+    .assistiveTouch{
+        position: relative;
+        width: 70px;
+        height: 70px;
+        border-radius: 14px;
+        background: rgba(0,0,0,.7);
+        opacity: .7;
+    }
+    .assistiveTouch:before,
+    .assistiveTouch:after,
+    .assistiveTouch span{
+        content: '';
+        position: absolute;
+        border-radius: 100%;
+        background: rgba(255,255,255,.6);
+        box-shadow: 0 0 2px rgba(0,0,0,.5);
+    }
+    .assistiveTouch:before{
+        width: 56px;
+        height: 56px;
+        top: 7px;
+        left: 7px;
+    }
+    .assistiveTouch span{
+        width: 46px;
+        height: 46px;
+        top: 12px;
+        left: 12px;
+    }
+    .assistiveTouch:after{
+        width: 36px;
+        height: 36px;
+        top: 17px;
+        left: 17px;
+        background: #fff;
+    }
+</style>
+
+
+
+<div class="assistive-touch-cnt">
+    <div class="assistiveTouch" id="assistiveTouch"><span></span></div>
+</div>
+
+<script src="toucher.js"></script>
+<script>
+
+var start_left,start_top;
+util.toucher(document.getElementById('assistiveTouch'))
+    .on('swipeStart',function(e){
+        start_left = parseInt(this.style.left) || 0;
+        start_top = parseInt(this.style.top) || 0;
+        this.style.transition = 'none';
+        this.style.opacity = 1;
+    }).on('swipe',function(e){
+    this.style.left = (start_left + e.moveX) + 'px';
+    this.style.top = (start_top + e.moveY) + 'px';
+    return false;
+}).on('swipeEnd',function(e){
+    this.style.transition = '.1s';
+    this.style.left = '0px';
+    this.style.top = '0px';
+    this.style.opacity = '';
+});
+</script>
+</body>
+</html>
+

@@ -76,7 +76,6 @@ THREE.MMDLoader.prototype.loadModel = function ( url, callback, onProgress, onEr
 
     this.loadFileAsBuffer( url, function ( buffer ) {
         callback( scope.createModel( buffer, modelExtension, texturePath ) );
-
     }, onProgress, onError );
 
 };

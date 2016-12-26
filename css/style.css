@@ -1,7 +1,6 @@
 body {
     background-color: #000;
     margin: 0px;
-    display: block;
     position: relative;
 }
 
@@ -203,7 +202,7 @@ a:hover {
 }
 
 #hg {
-    z-index: 9999;
+    z-index: 1001;
     height: 100px;
     width: 100%;
     display: none;
@@ -295,7 +294,7 @@ a:hover {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 1001;
     display: none;
     font-size: 20px;
     margin-top: 20px;
@@ -320,7 +319,7 @@ a:hover {
     position: absolute;
     right: 0;
     top: 0;
-    z-index: 9999;
+    z-index: 1001;
     display: none;
     font-size: 20px;
 }
@@ -339,10 +338,26 @@ a:hover {
     position: absolute;
     left: 0;
     bottom: 0;
-    z-index: 9999;
+    z-index: 1001;
+    margin-left: 20px;
     display: none;
+    width: 100px;
+    height: 100px;
     font-size: 20px;
 }
+
+#controlArea .pos {
+    width: 80px;
+    height: 80px;
+}
+.control-border-area {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1px solid #5bc0de;
+    padding: 4px;
+}
+
 
 #controlArea .pos .btn {
     text-align: center;
@@ -358,11 +373,22 @@ a:hover {
     position: absolute;
     right: 0;
     bottom: 0;
-    z-index: 9999;
+    z-index: 1001;
     display: none;
     font-size: 20px;
     margin-right: 20px;
     margin-bottom: 30px;
+}
+
+.controller-area {
+    width: 48px;
+    height: 48px;
+    position: relative;
+    /*left: -2px;*/
+    margin-top: 6px;
+    border: 1px solid #369;
+    padding: 5px;
+    border-radius: 50%;
 }
 
 #controlAction .pos .btn {
@@ -384,4 +410,95 @@ a:hover {
     height: 20px;
     top: -12px;
 }
-】
+
+
+.progress{
+    height: 25px;
+    background: #262626;
+    padding: 5px;
+    overflow: visible;
+    border-radius: 20px;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #7992a8;
+    margin-top: 50px;
+}
+.progress .progress-bar{
+    border-radius: 20px;
+    position: relative;
+    animation: animate-positive 2s;
+}
+.progress .progress-value{
+    display: block;
+    padding: 3px 7px;
+    font-size: 13px;
+    color: #fff;
+    border-radius: 4px;
+    background: #191919;
+    border: 1px solid #000;
+    position: absolute;
+    top: -40px;
+    right: -10px;
+}
+.progress .progress-value:after{
+    content: "";
+    border-top: 10px solid #191919;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    position: absolute;
+    bottom: -6px;
+    left: 26%;
+}
+.progress-bar.active{
+    animation: reverse progress-bar-stripes 0.40s linear infinite, animate-positive 2s;
+}
+@-webkit-keyframes animate-positive{
+    0% { width: 0; }
+}
+@keyframes animate-positive{
+    0% { width: 0; }
+}
+
+/*//--------------- 【 手柄 】 ---------------------------------*/
+.assistive-touch-cnt{
+    margin-bottom: 20px;
+    position: absolute;
+    z-index: 10000;
+}
+
+
+.assistiveTouch{
+    position: relative;
+    /*width: 70px;*/
+    /*height: 70px;*/
+    border-radius: 14px;
+    background: rgba(0,0,0,.7);
+    opacity: .7;
+}
+.assistiveTouch:before,
+.assistiveTouch:after,
+.assistiveTouch span{
+    content: '';
+    position: absolute;
+    border-radius: 100%;
+    background: rgba(255,255,255,.6);
+    box-shadow: 0 0 2px rgba(0,0,0,.5);
+}
+.assistiveTouch:before{
+    /*width: 36px;*/
+    /*height: 36px;*/
+    /*top: 7px;*/
+    /*left: 7px;*/
+}
+.assistiveTouch span{
+    width: 46px;
+    height: 46px;
+    top: 12px;
+    left: 12px;
+}
+.assistiveTouch:after{
+    width: 36px;
+    height: 36px;
+    top: 17px;
+    left: 17px;
+    background: #fff;
+}

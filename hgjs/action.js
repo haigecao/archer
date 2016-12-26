@@ -83,6 +83,6 @@ function changeMove(num) {
 
 
 
-$("#controller-area").click(function () {
-    
-});
+// $("#controller-area").click(function () {
+//
+// });

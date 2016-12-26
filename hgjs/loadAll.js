@@ -1,20 +1,40 @@
+
+var singalProcess = 0;
+var onProgress = function (xhr) {
+    if (xhr.lengthComputable) {
+        var percentComplete = xhr.loaded / xhr.total * 100;
+        if (percentComplete == 100) {
+
+            archer.loadNum++;
+            // console.log("ok-- ----------------- ----->", archer.loadNum);
+            var process = 25 + parseInt(archer.loadNum * 5);
+
+            singalProcess = $('.progress-bar-striped').css('width');
+            // console.log("singalProcess", singalProcess);
+
+            if (singalProcess < process) {
+                singalProcess = process;
+            }
+            $('.progress-bar-striped').css('width', singalProcess + "%");
+
+            if (archer.modelLength * 3 == archer.loadNum && process == 100) {
+                initButton();
+                // ininController();       // 初始化按钮
+            }
+        }
+    }
+};
+
 function loadList() {
     // 模型的动作
     var action = {
         1: ['./Action/wavefile_v2.vmd'],
-        2: ['./Action/3.vmd'],
+        2: ['./Action/15.vmd'],
         3: ['./Action/13.vmd'],
-        4: ['./Action/15.vmd'],
-        5: ['./Action/17.vmd'],
+        4: ['./Action/3.vmd'],
     };
 
     function initModelList(item, meshItem) {
-        var onProgress = function (xhr) {
-            if (xhr.lengthComputable) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                // console.log("hg ------------ ", Math.round(percentComplete, 2) + '% downloaded');
-            }
-        };
         var onError = function (xhr) {};
         var modelName = 'miku.pmd';
         var modelFile = "./Model/" + modelName;
@@ -40,9 +60,6 @@ function loadList() {
                 scene.add(ikHelper);
                 helper.setPhysics(meshItem);
                 ready = true;
-                console.log("ok-- 1111111111 ----->", item, "radialObj", radialObj);
-                archer.loadNum++;
-                // radialObj.animate(25 + parseInt(archer.loadNum * 15));
 
             }, onProgress, onError);
         }(item);
