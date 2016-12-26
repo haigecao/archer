@@ -81,8 +81,3 @@ function changeMove(num) {
         archer.oldCamer = camera.clone();
 }
 
-
-
-// $("#controller-area").click(function () {
-//
-// });

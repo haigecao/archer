@@ -119,17 +119,17 @@
                 this.style.opacity = 1;
             })
             .on('swipe',function(e){
-                if ( e.moveX >= 9) {
-                    e.moveX = 9;
+                if ( e.moveX >= 13) {
+                    e.moveX = 13;
                 }
-                if (e.moveY > 9) {
-                    e.moveY = 9;
+                if (e.moveY > 13) {
+                    e.moveY = 13;
                 }
-                if (e.moveX <= -9) {
-                    e.moveX = -9;
+                if (e.moveX <= -13) {
+                    e.moveX = -13;
                 }
-                if (e.moveY <= -9) {
-                    e.moveY = -9;
+                if (e.moveY <= -13) {
+                    e.moveY = -13;
                 }
 
 
@@ -151,7 +151,7 @@
 
 
 </script>
-<script src="threejs/three.js"></script>
+<script src="threejs/three.min.js"></script>
 <script src="threejs/Detector.js"></script>
 <script src="threejs/CopyShader.js"></script>
 <script src="threejs/FXAAShader.js"></script>
